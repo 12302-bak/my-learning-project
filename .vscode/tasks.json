@@ -1,0 +1,80 @@
+{
+	"version": "2.0.0",
+	"tasks": [
+		{
+			"label": "cmake: configure",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"-S", ".",
+				"-B", "build",
+				"-DCMAKE_BUILD_TYPE=Debug",
+				"-DCMAKE_C_COMPILER=gcc",
+				// generate `compile_commands.json`
+				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"
+			],
+			// "options": {
+			// 	"cwd": "${fileDirname}"
+			// },
+			"group": "build",
+			"problemMatcher": "$gcc",
+			"detail": "Configure CMake for Debug"
+		},
+		{
+			"label": "cmake: build",
+			"type": "shell",
+			"command": "cmake",
+			"args": [
+				"--build",
+				"build",
+				"--config",
+				"Debug"
+			],
+			// "options": {
+			// 	"cwd": "${fileDirname}"
+			// },
+			"group": {
+				"kind": "build",
+				"isDefault": false
+			},
+			"problemMatcher": "$gcc",
+			"detail": "Build Project for Debug",
+			"dependsOn": "cmake: configure"
+		},
+		{
+			"label": "cmake: clean",
+			"detail": "no description",
+			"type": "shell",
+			"command": "rm",
+			"args": [
+				"-rf",
+				"build"
+			],
+			"problemMatcher": []
+		},
+		{
+            "label": "embed variables (Echo)",
+			"detail": "also can program print this variables via args[] of launch.json.",
+            "type": "shell",
+            "command": "/usr/bin/echo",
+			// https://code.visualstudio.com/docs/reference/variables-reference
+            "args": [
+                "\n======= embed variables =======",
+                "\n[workspaceFolder:         ${workspaceFolder}",
+                "\n[file:                    ${file}",
+                "\n[fileExtname:             ${fileExtname}",
+                "\n[fileBasenameNoExt:       ${fileBasenameNoExtension}",
+                "\n[fileDirnameBasename:     ${fileDirnameBasename}",
+                "\n[fileDirname:             ${fileDirname}",
+                "\n[relativeFileDirname:     ${relativeFileDirname}",
+                "\n[buildDir:                ${config:cmake.buildDirectory}",
+                "\n==========  ${/}  ================",
+            ],
+			"problemMatcher": [],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+        }
+	]
+}

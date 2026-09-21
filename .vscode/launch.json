@@ -1,0 +1,39 @@
+{
+    "configurations": [
+        {
+            "name": "learning Launch",
+            "type": "cppdbg",
+            "request": "launch",
+            // ${workspaceFolder} : https://code.visualstudio.com/docs/reference/variables-reference
+            "program": "${workspaceFolder}/build/${relativeFileDirname}/${fileBasenameNoExtension}",
+            "args": [],
+            "stopAtEntry": false,
+            "cwd": "${fileDirname}",
+            "environment": [],
+            "externalConsole": false,
+            "MIMode": "gdb",
+            "miDebuggerPath": "/usr/bin/gdb",
+            "miDebuggerArgs": "-q -ex quit; wait() { fg >/dev/null; }; /bin/gdb -q --interpreter=mi",
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true
+                },
+                {
+                    "description": "Set Disassembly Flavor to Intel",
+                    "text": "-gdb-set disassembly-flavor intel",
+                    "ignoreFailures": true
+                }
+            ],
+            "sourceFileMap": {
+                "./csu": "/usr/src/glibc/glibc-2.39/csu",
+                "../sysdeps": "/usr/src/glibc/glibc-2.39/sysdeps",
+                "./sysdeps": "/usr/src/glibc/glibc-2.39/sysdeps",
+                "./nptl": "/usr/src/glibc/glibc-2.39/nptl"
+            },
+            "preLaunchTask": "cmake: build"
+        },
+    ],
+    "version": "2.0.0"
+}
