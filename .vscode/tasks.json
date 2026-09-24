@@ -9,7 +9,7 @@
 				"-S", ".",
 				"-G", "Ninja",
 				"-B", "build",
-				"-DCMAKE_BUILD_TYPE=Debug",
+				// "-DCMAKE_BUILD_TYPE=Debug",
 				"-DCMAKE_C_COMPILER=gcc",
 				// generate `compile_commands.json`
 				"-DCMAKE_EXPORT_COMPILE_COMMANDS=ON"

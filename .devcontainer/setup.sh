@@ -8,22 +8,20 @@ cat > /tmp/sources.list << 'EOF'
 # https://mirrors.tuna.tsinghua.edu.cn/help/ubuntu/
 # https://developer.aliyun.com/mirror/ubuntu
 # 默认注释了源码镜像以提高 apt update 速度，如有需要可自行取消注释
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble main restricted universe multiverse
+deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-updates main restricted universe multiverse
+# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
+# deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-backports main restricted universe multiverse
 
-deb https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse
-# deb-src https://mirrors.aliyun.com/ubuntu/ noble main restricted universe multiverse
-
-deb https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse
-#deb-src https://mirrors.aliyun.com/ubuntu/ noble-security main restricted universe multiverse
-
-deb https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse
-# deb-src https://mirrors.aliyun.com/ubuntu/ noble-updates main restricted universe multiverse
+# 以下安全更新软件源为官方源配置
+deb http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
+# deb-src http://security.ubuntu.com/ubuntu/ noble-security main restricted universe multiverse
 
 # 预发布软件源，不建议启用
-# deb https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse
-# deb-src https://mirrors.aliyun.com/ubuntu/ noble-proposed main restricted universe multiverse
-
-# deb https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse
-# deb-src https://mirrors.aliyun.com/ubuntu/ noble-backports main restricted universe multiverse
+# deb https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
+# # deb-src https://mirrors.tuna.tsinghua.edu.cn/ubuntu/ noble-proposed main restricted universe multiverse
 
 EOF
 
@@ -43,6 +41,6 @@ sudo apt install -y gcc-multilib
 sudo apt install -y glibc-source && cd /usr/src/glibc/ && sudo tar -xf glibc-*.tar.xz
 
 # 安装 clangd (22.1.6)，外部下载的压缩包挂载到 /mnt 目录下
-sudo unzip -qo /mnt/clangd-linux-22.1.6.zip -d /opt/ && sudo ln -s /opt/clangd_22.1.6/bin/clangd /usr/bin/clangd
+# sudo unzip -qo /mnt/clangd-linux-22.1.6.zip -d /opt/ && sudo ln -s /opt/clangd_22.1.6/bin/clangd /usr/bin/clangd
 
 echo '✅ APT source updated and tools installed!'

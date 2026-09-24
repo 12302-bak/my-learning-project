@@ -3,7 +3,8 @@ project(my_learning_project C)
 
 set(CMAKE_C_STANDARD 99)
 set(CMAKE_BUILD_TYPE Debug)
-add_compile_options(-g)
+# add_compile_options(-g)
+# add_compile_options("-isystem" "/usr/lib/gcc/x86_64-linux-gnu/11/include")
 
 # file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 file(GLOB SUB_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9]*")

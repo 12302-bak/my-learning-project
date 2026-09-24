@@ -6,9 +6,9 @@
 	"image": "mcr.microsoft.com/devcontainers/base:noble",
 	"runArgs": [
 		// https://stackoverflow.com/questions/24551592/how-to-make-sure-dockers-time-syncs-with-that-of-the-host
-		"-v", "/etc/localtime:/etc/localtime:ro",
+		"-v", "/etc/localtime:/etc/localtime:ro"
 		// https://github.com/clangd/clangd/releases/download/22.1.6/clangd-linux-22.1.6.zip
-		"-v", "/Users/stevenobelia/Documents/misc/clangd-linux-22.1.6.zip:/mnt/clangd-linux-22.1.6.zip"
+		// "-v", "/Users/stevenobelia/Documents/misc/clangd-linux-22.1.6.zip:/mnt/clangd-linux-22.1.6.zip"
 	],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
@@ -32,12 +32,12 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
-				"C_Cpp.intelliSenseEngine": "disabled"
+				"C_Cpp.intelliSenseEngine": "default"
 			},
 			"extensions": [
 				"ms-vscode.cpptools", 
 				"ms-vscode.cpptools-extension-pack",
-				"llvm-vs-code-extensions.vscode-clangd",
+				// "llvm-vs-code-extensions.vscode-clangd",
 				"ledyba.launch-buttons"
 			]
 		}
