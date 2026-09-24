@@ -3,23 +3,23 @@
 
     格式化符号 [参考:02_README.md](./../02_basic_syntax/README.md#格式符)
 
-    | 类型 | 简写 | 大小 | 有效数字/范围 | 格式化符号 | 说明 |
-    |:---|:---|:---|:---|:---|:---|
-    | _Bool | | 1 | 0 或 1 | %d | C99 引入的布尔类型，是语言关键字 |
-    | char | | 1 | (-128 ~ 127)/(0 ~ 255) | %c | 本质是整数，存储 ASCII 码值，符号性由编译器实现决定 |
-    | signed char | | 1 | -128 ~ 127 | %hhd | 明确有符号 |
-    | unsigned char | | 1 | 0 ~ 255 | %hhu | 明确无符号 |
-    | short int | short | 2 | -32768 ~ 32767 | %hd | 短整型 |
-    | unsigned short int | unsigned short | 2 | 0 ~ 65535 | %hu | 无符号短整型 |
-    | int | | 4 | -2147483648 ~ 2147483647 | %d | 机器最自然的整数长度 |
-    | unsigned int | | 4 | 0 ~ 4294967295 | %u | 无符号整型 |
-    | long int | long | 4或8 | 取决于ABI | %ld | Linux 64位下为8字节，Windows 64位下为4字节 |
-    | unsigned long int | unsigned long | 4或8 | 取决于ABI | %lu | 无符号长整型 |
-    | long long int | long long | 8 | -9.2×10¹⁸ ~ 9.2×10¹⁸ | %lld | C99 引入 |
-    | unsigned long long int | unsigned long long | 8 | 0 ~ 1.8×10¹⁹ | %llu | 无符号长长整型 |
-    | float | | 4 | 6~7位有效数字，±3.4×10³⁸ | %f | IEEE 754 单精度 |
-    | double | | 8 | 15~16位有效数字，±1.7×10³⁰⁸ | %lf、%f | C99 引入(%lf)，在 printf 与 %f 等价，scanf 需要使用 %lf |
-    | long double | | 8/10/12/16 | 高于 double | %Lf | 平台相关，x86 上 GCC 通常为 80 位扩展精度 |
+    | 类型                   | 简写               | 大小       | 有效数字/范围               | 格式化符号 | 说明                                                    |
+    | :--------------------- | :----------------- | :--------- | :-------------------------- | :--------- | :------------------------------------------------------ |
+    | _Bool                  |                    | 1          | 0 或 1                      | %d         | C99 引入的布尔类型，是语言关键字                        |
+    | char                   |                    | 1          | (-128 ~ 127)/(0 ~ 255)      | %c         | 本质是整数，存储 ASCII 码值，符号性由编译器实现决定     |
+    | signed char            |                    | 1          | -128 ~ 127                  | %hhd       | 明确有符号                                              |
+    | unsigned char          |                    | 1          | 0 ~ 255                     | %hhu       | 明确无符号                                              |
+    | short int              | short              | 2          | -32768 ~ 32767              | %hd        |                                                      |
+    | unsigned short int     | unsigned short     | 2          | 0 ~ 65535                   | %hu        | 无符号短整型                                            |
+    | int                    |                    | 4          | -2147483648 ~ 2147483647    | %d         | 机器最自然的整数长度                                    |
+    | unsigned int           |                    | 4          | 0 ~ 4294967295              | %u         | 无符号整型                                              |
+    | long int               | long               | 4或8       | 取决于ABI                    | %ld        | Linux 64 位下为 8 字节，Windows 64 位下为 4 字节        |
+    | unsigned long int      | unsigned long      | 4或8       | 取决于ABI                    | %lu        | 无符号长整型                                            |
+    | long long int          | long long          | 8          | -9.2×10¹⁸ ~ 9.2×10¹⁸        | %lld       | C99 引入                                                |
+    | unsigned long long int | unsigned long long | 8          | 0 ~ 1.8×10¹⁹                | %llu       | 无符号长长整型                                          |
+    | float                  |                    | 4          | 6~7位有效数字，±3.4×10³⁸      | %f         | IEEE 754 单精度                                         |
+    | double                 |                    | 8          | 15~16位有效数字，±1.7×10³⁰⁸   | %lf、%f    | C99 引入(%lf)，在 printf 与 %f 等价，scanf 需要使用 %lf |
+    | long double            |                    | 8/10/12/16 | 高于 double                  | %Lf        | 平台相关，x86 上 GCC 通常为 80 位扩展精度               |
 
 * ## 控制字符
 
