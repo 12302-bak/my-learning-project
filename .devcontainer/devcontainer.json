@@ -4,7 +4,12 @@
 	"name": "Ubuntu",
 	// Or use a Dockerfile or Docker Compose file. More info: https://containers.dev/guide/dockerfile
 	"image": "mcr.microsoft.com/devcontainers/base:noble",
-	// "runArgs": [ "-v", "/etc/localtime:/etc/localtime:ro" ],
+	"runArgs": [
+		// https://stackoverflow.com/questions/24551592/how-to-make-sure-dockers-time-syncs-with-that-of-the-host
+		"-v", "/etc/localtime:/etc/localtime:ro",
+		// https://github.com/clangd/clangd/releases/download/22.1.6/clangd-linux-22.1.6.zip
+		"-v", "/Users/stevenobelia/Documents/misc/clangd-linux-22.1.6.zip:/mnt/clangd-linux-22.1.6.zip"
+	],
 
 	// Features to add to the dev container. More info: https://containers.dev/features.
 	// "features": {},
@@ -29,11 +34,11 @@
 			"settings": {
 				"C_Cpp.intelliSenseEngine": "disabled"
 			},
-			"extensions": [ 
+			"extensions": [
 				"ms-vscode.cpptools", 
-				"ms-vscode.cpp-devtools", 
-				"ms-vscode.cpptools-themes", 
-				"llvm-vs-code-extensions.vscode-clangd"
+				"ms-vscode.cpptools-extension-pack",
+				"llvm-vs-code-extensions.vscode-clangd",
+				"ledyba.launch-buttons"
 			]
 		}
 	}

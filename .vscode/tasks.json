@@ -7,6 +7,7 @@
 			"command": "cmake",
 			"args": [
 				"-S", ".",
+				"-G", "Ninja",
 				"-B", "build",
 				"-DCMAKE_BUILD_TYPE=Debug",
 				"-DCMAKE_C_COMPILER=gcc",
@@ -28,18 +29,22 @@
 				"--build",
 				"build",
 				"--config",
-				"Debug"
+				"Debug",
 			],
-			// "options": {
-			// 	"cwd": "${fileDirname}"
-			// },
+			"presentation": {
+                "echo": true,
+                "clear": false,
+                "showReuseMessage": false,
+                "reveal": "silent",      // 只有在编译真正出错（Error）的时候才弹出终端
+                "panel": "shared"        // 共享同一个终端面板，避免无限开新窗口
+            },
 			"group": {
 				"kind": "build",
 				"isDefault": false
 			},
 			"problemMatcher": "$gcc",
 			"detail": "Build Project for Debug",
-			"dependsOn": "cmake: configure"
+			// "dependsOn": "cmake: configure"
 		},
 		{
 			"label": "cmake: clean",
@@ -67,13 +72,18 @@
                 "\n[fileDirnameBasename:     ${fileDirnameBasename}",
                 "\n[fileDirname:             ${fileDirname}",
                 "\n[relativeFileDirname:     ${relativeFileDirname}",
-                "\n[buildDir:                ${config:cmake.buildDirectory}",
+				// must be install cmake tools extensions
+                //"\n[buildDir:                ${config:cmake.buildDirectory}",
                 "\n==========  ${/}  ================",
             ],
 			"problemMatcher": [],
 			"group": {
 				"kind": "build",
 				"isDefault": true
+			},
+			"presentation": {
+				"echo": false,
+				"clear": true
 			}
         }
 	]

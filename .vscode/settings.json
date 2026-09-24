@@ -1,4 +1,12 @@
 {
+    "terminal.integrated.env.osx": {
+        "DOCKER_HOST": "unix:///Users/stevenobelia/.orbstack/run/docker.sock"
+    },
+    "dev.containers.dockerSocketPath": "unix:///Users/stevenobelia/.orbstack/run/docker.sock",
+    // "extensions.ignoreRecommendations": true,
+    "debug.toolBarLocation": "floating",
+    "debug.showVariableTypes": true,
+
     //"C_Cpp.default.compilerPath": "/usr/bin/gcc",
     //"C_Cpp.default.configurationProvider": "ms-vscode.cmake-tools",
     //"cmake.sourceDirectory": "/workspaces/c_learning/single-proj",
@@ -6,11 +14,13 @@
     // 让 clangd 自动在 build 目录下寻找编译数据库
     "clangd.arguments": [
         "--compile-commands-dir=build",
+        "--query-driver=/usr/bin/gcc",
         "--background-index",                  // 后台自动建立索引
         "--clang-tidy",                        // 开启 Clang-Tidy 静态分析引擎（CLion 同款）
         "--all-scopes-completion",             // 补全时显示所有建议
         "--completion-style=detailed",         // 详细补全信息
-        "--header-insertion=iwyu",             // 自动导入缺失的头文件 (Include What You Use)
+        //"--header-insertion=iwyu",           // 自动导入缺失的头文件 (Include What You Use)（相当于自动导入头文件功能）
+        "--header-insertion=never",            // 
         "--pch-storage=memory"                 // 优先使用内存缓存，加速解析
-    ]
+    ],
 }
