@@ -7,6 +7,19 @@
     // "extensions.ignoreRecommendations": true,
     "debug.toolBarLocation": "floating",
     "debug.showVariableTypes": true,
+
+    "files.autoSave": "onFocusChange",
+    
+    "github.copilot.enable": {
+        "*": false,
+        "plaintext": false,
+        "markdown": false,
+        "scminput": false
+    },
+
+    // 配合 C/C++ IntelliSense extension 进行代码分析
+    "C_Cpp.codeAnalysis.runAutomatically": true,
+    "C_Cpp.codeAnalysis.clangTidy.enabled": true,
     
     // 有点垃圾，乱跳，实在调教不了、
     "clangd.arguments": [

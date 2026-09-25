@@ -73,10 +73,9 @@ int main(){
                 不同进制可以混合使用，比如 10 + 015 + 0x20 是一个合法的表达式。
                 显示前缀，参考 README.md。
 
-                在stdint.h出现之前，C语言的整数类型设计是带着历史包袱的。
-                C语言标准只规定了每种整数类型的最小取值范围，比如int至少能表示-32767到32767，但并没有强制规定它必须是2字节还是4字节。
-                这带给编译器实现者很大的自由度，却给应用开发者带来了灾难。
-
+                在 stdint.h 出现之前，C 语言的整数类型设计是带着历史包袱的。
+                C 语言标准只规定了每种整数类型的最小取值范围，比如 int 至少能表示 -32767 到 32767，但并没有强制规定它必须是 2 字节还是 4 字节。
+                这带给编译器实现者很大的自由度，却给应用开发者带来了灾难。可以参考后面的：可移植类型
      */
         printf("\n========================Interger Type========================\n");
         signed int i = 100; int j = 200;
@@ -163,7 +162,6 @@ int main(){
                 用容差比较：
                 #include <math.h>
                 if (fabs(a - b) < 1e-6) { // 认为相等  }
-
      */
         printf("\n========================Floating Point Type========================\n");
         float f1 = 33.1234563f; 
@@ -260,7 +258,7 @@ int main(){
             大于最大值，叫做向上溢出（overflow）；小于最小值，叫做向下溢出（underflow）。
             一般来说，编译器不会对溢出报错，会正常执行代码，但是会忽略多出来的二进制位，只保留剩下的位，这样往往会得到意想不到的结果。所以，应该避免溢出。
      */
-        printf("\n======================== Overflow ========================\n");
+        printf("\n========================Overflow========================\n");
         unsigned char uc = 255;
         uc = uc + 1;
         printf("uc value: %d\n", uc);       // 0
@@ -278,8 +276,138 @@ int main(){
     /**
         8. sizeof 运算符:
             sizeof是 C 语言提供的一个运算符，返回某种数据类型或某个值占用的字节数量。它的参数可以是数据类型的关键字，也可以是变量名或某个具体的值。
+
+            sizeof 运算符的返回值，C 语言只规定是无符号整数，并没有规定具体的类型，而是留给系统自己去决定，sizeof 到底返回什么类型。
+            不同的系统中，返回值的类型有可能是 unsigned int，也有可能是 unsigned long，甚至是 unsigned long long，对应的 printf() 占位符分别是 %u、%lu 和 %llu。
+            这样不利于程序的可移植性。
+            C 语言提供了一个解决方法，创造了一个类型别名 size_t，用来统一表示 sizeof 的返回值类型。
+            该别名定义在 stddef.h 头文件（引入 stdio.h 时会自动引入）里面，对应当前系统的 sizeof 的返回值类型，可能是 unsigned int，也可能是 unsigned long。
+
+            C 语言还提供了一个常量 SIZE_MAX，表示 size_t 可以表示的最大整数。所以，size_t 能够表示的整数范围为[0, SIZE_MAX]。
+
+            printf() 有专门的占位符 %zd 或 %zu，用来处理 size_t 类型的值。 不管 sizeof 返回值的类型是什么，%zd 占位符（或 %zu ）都可以正确输出。
+            如果当前系统不支持 %zd 或 %zu，可退回 %u（unsigned int）或 %lu（unsigned long int）代替。
      */
-        printf("\n======================== Overflow ========================\n");
+        printf("\n========================Sizeof()========================\n");
+        // 参数为数据类型
+        size_t s1 = sizeof(int);
+        // 参数为变量
+        int ll; size_t s2 = sizeof(ll);
+        // 参数为数值
+        size_t s3 = sizeof(3.14);
+        size_t s4 = sizeof(size_t);
+        printf("int: %zu, value: %zu, literal: %zu, size_t: %zu\n", s1, s2, s3, s4);        // int: 4, value: 4, literal: 8, size_t: 8
+
+    /**
+        9. 类型的(隐式/自动)转换:
+
+            9.1 赋值运算: 赋值运算符会自动将右边的值，转成左边变量的类型。
+                （1）浮点数赋值给整数变量: 浮点数赋予整数变量时，C 语言直接丢弃小数部分，而不是四舍五入。
+                    int x = 3.14; 中 变量 x 是整数类型，赋给它的值是一个浮点数。编译器会自动把 3.14 先转为 int 类型，丢弃小数部分，再赋值给 x，因此 x 的值是 3。
+                    而且有编译警告，当前使用 #pragma 预处理指令消除了警告。
+                    这种自动转换会导致部分数据的丢失（3.14 丢失了小数部分），所以最好不要跨类型赋值，尽量保证变量与所要赋予的值是同一个类型。注意，舍弃小数部分时，不是四舍五入，而是整个舍弃。
+                    int x = 12.99; 示例中，x 等于 12，而不是四舍五入的 13。
+
+                （2）整数赋值给浮点数变量: 整数赋值给浮点数变量时，会自动转为浮点数。
+                    float y = 12 * 2; 示例中，变量 y 的值不是 24，而是 24.0，因为等号右边的整数自动转为了浮点数。
+
+                （3）窄类型赋值给宽类型: 字节宽度较小的整数类型，赋值给字节宽度较大的整数变量时，会发生类型提升，即窄类型自动转为宽类型。
+                    比如，char 或 short 类型赋值给 int 类型，会自动提升为 int。
+                    char x = 10; int i = x + y; 示例中，变量 x 的类型是 char，由于赋值给 int 类型，所以会自动提升为 int。
+
+                （4）宽类型赋值给窄类型: 字节宽度较大的类型，赋值给字节宽度较小的变量时，会发生类型降级，自动转为后者的类型。
+                    这时可能会发生截值（truncation），系统会自动截去多余的二进制位，导致难以预料的结果。
+                    int act_ch = 321; char act02 = act_ch;  // act02: 65
+
+            9.2 混合类型的运算: 不同类型的值进行混合计算时，必须先转成同一个类型，才能进行计算。转换规则如下：
+                （1）整数与浮点数混合运算时，整数转为浮点数类型，与另一个运算数类型相同。
+                    3 + 1.2 // 4.2
+                    示例是 int 类型与~float~ double类型的混合计算，int 类型的 3 会先转成 double 的 3.0，再进行计算，得到 double 4.2
+
+                （2）不同的浮点数类型混合运算时，宽度较小的类型转为宽度较大的类型，比如 float 转为 double，double 转为 long double。
+
+                （3）不同的整数类型混合运算时，宽度较小的类型会提升为宽度较大的类型。比如 short 转为 int，int 转为 long 等。
+
+                （4）有时还会将带符号的类型 signed 转为无符号 unsigned。
+
+            9.3 整数类型的运算: 两个相同类型的整数运算时，或者单个整数的运算，一般来说，运算结果也属于同一类型。
+                但是有一个例外: 宽度小于 int 的类型，运算结果会自动提升为 int。这个特性被称为“整数提升”（Integer Promotion）。
+                    C 语言标准规定：在表达式中，任何宽度小于 int 的整型（如 char、short、bool 以及它们的有符号/无符号版本）在进行运算时，其值都会被自动提升为 int ~或 unsigned int~。
+                    应该是提升不到 unsigned int。如下验证：
+
+            9.4 函数: 函数的`参数`和`返回值`，会自动转成函数定义里指定的类型。
+                int dostuff(int, unsigned char);
+
+                char m = 42;
+                unsigned short n = 43;
+                long long int c = dostuff(m, n);
+
+     */
+        printf("\n========================Implicit type conversion========================\n");
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wliteral-conversion"
+        int atc01 = 3.14;
+        #pragma clang diagnostic pop
+        printf("act01: %d\n", atc01);
+        // 使用 GCC/Clang 的内建函数 __builtin_types_compatible_p，可以判断 __typeof__ 得到的类型是否和某个已知类型相同
+        // 另外还有 C11 里面的 _Generic 宏也可以做到
+        if (__builtin_types_compatible_p(__typeof__(atc01), int)) 
+            printf("atc01's type is int\n");
+
+        // truncation
+        int act_ch = 321; char act02 = act_ch;
+        printf("act02: %hhd\n", act02);         // act02: 65
+
+        // signed -> unsigned
+        if (-5 > sizeof(int))                // sizeof 返回`无符号`的值。
+            printf("negative greater than positive : (-5 > 4)!\n");
+
+        unsigned char act0401 =  121; unsigned char act0402 = 200; signed char act04 = act0401 + act0402;
+        signed   char act0403 = '\0'; signed   char act0404 = 4;
+        // 1. sizeof
+        printf("Use sizeof verfiy integer promotion for unsigned: %zu\n", sizeof(act0401 + act0402));   // 4
+        printf("Use sizeof verfiy integer promotion for signed  : %zd\n", sizeof(act0403 + act0404));   // 4
+        // 2. __typeof__
+        if (__builtin_types_compatible_p(__typeof__(act0401 - act0402), int) && __builtin_types_compatible_p(__typeof__(act04), signed char))
+            printf("act04's type is signed char and other is int: %hhu\n", act04);                      // ✅  :65
+
+        // 进行`-`运算前，先对值进行提升，且提到了 `int`
+        unsigned char act0501 = 66; // promote to `signed int` ==> (signed int act0501 = 66)
+        if ((-act0501) < 0) printf("promote to `signed int`\n");
+        // 如果提升到了如下`unsigned int`，则会发生回绕，判断表达式不会成立，正好验证提升机制。
+        unsigned int  act0502 = 66;
+        if ((-act0502) < 0) printf("can't promote to `unsigned int`\n");
+
+    /**
+        10. 类型的显式转换: 原则上，应该避免类型的自动转换，防止出现意料之外的结果。C 语言提供了类型的显式转换，允许手动转换类型。
+            
+            只要在一个值或变量的前面，使用圆括号指定类型(type)，就可以将这个值或变量转为指定的类型，这叫做“类型指定”（casting）。
+
+            (unsigned char) ch                  // 示例将变量 ch 转成无符号的字符类型。
+            long int y = (long int) 10 + 12;    // 示例中，(long int) 将 10 显式转为 long int 类型。这里的显示转换其实是不必要的，因为赋值运算符会自动将右边的值，转为左边变量的类型。
+     */
+        printf("\n========================Explicit type conversion========================\n");
+
+    /**
+        11. 可移植类型: C 语言的整数类型（short、int、long）在不同计算机上，占用的字节宽度可能是不一样的，无法提前知道它们到底占用多少个字节。
+            
+            程序员有时需要准确控制字节宽度，这样的话，代码可以有更好的可移植性，头文件 stdint.h 便创造了一些新的类型别名。
+
+            （1）精确宽度类型(exact-width integer type)，保证某个整数类型的宽度是确定的。可以参考 README.md#位宽限制-intn_t
+            （2）最小宽度类型（minimum width type），保证某个整数类型的最小长度。
+            （3）最快的最小宽度类型（fast minimum width type），可以使整数计算达到最快的类型。
+            （4）可以保存指针的整数类型。有时候需要运算指针，需要转换成整形，但是位宽（32，64？）又成问题了，所以就统一一下。
+                当前环境：`typedef long int		intptr_t;`
+            （5）最大宽度整数类型，用于存放最大的整数。
+                intmax_t： 可以存储任何有效的有符号整数的类型。
+                uintmax_t：可以存放任何有效的无符号整数的类型。
+
+                [上面的这两个类型的宽度比 long long 和 unsigned long 更大]?
+                这种描述是有问题的，点进去定义，发现当前环境其实就是`typedef long int __intmax_t;` long 64 bit.
+     */
+        printf("\n========================Portable type========================\n");
+        intmax_t imt = 12302;
+        intptr_t ipt = 12302;
 
     printf("\nCongratulations! you have learned the data types of C language!\n");
     return 0;
