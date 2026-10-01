@@ -32,6 +32,11 @@
 		"vscode": {
 			// Set *default* container specific settings.json values on container create.
 			"settings": {
+				"files.autoSave": "onFocusChange",
+				"editor.wordWrap": "off",
+				"[markdown]": {
+					"editor.wordWrap": "off"
+				},
 				"C_Cpp.intelliSenseEngine": "default"
 			},
 			"extensions": [

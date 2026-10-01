@@ -86,7 +86,7 @@ int main(){
         if (a < INT_MAX)
             printf("a = %d, a = %d, o = %o, x = %x\n", a, INT32_MAX, INT_MAX, INT_MAX);
         
-        (void)sizeof(int); // 通过强制转换为 void，消除编译器对未使用变量的警告
+        (void)sizeof(int);  // 通过强制转换为 void，消除编译器对未使用变量的警告
         size_t size = sizeof(int);
         printf("\n");
         printf("sizeof(short)     = %zu bytes\n", sizeof(short));       // 2
@@ -264,7 +264,7 @@ int main(){
         printf("uc value: %d\n", uc);       // 0
         // 对于减法也是： 比如 0 - 1 ==> 0 + (-1) ==> 0b0000_0000 + 0b1111_1111 ==> 0b1111_1111 = 255
         // 注意不能直接用 uc - 1，应该会转换成 int，获取到不符合的结果。
-        printf("uc value: %d\n", --uc);   // 255
+        printf("uc value: %d\n", --uc);     // 255
 
         // 溢出很容易被忽视，编译器又不会报错，所以必须非常小心。如下情况:
         for (unsigned char i = 100; i >= 0; --i)    // 错误，因为无符号的就没有负值，会一直在 0 ~ 255 中循环，导致判断结果成立，条件无线循环。
@@ -359,7 +359,7 @@ int main(){
         printf("act02: %hhd\n", act02);         // act02: 65
 
         // signed -> unsigned
-        if (-5 > sizeof(int))                // sizeof 返回`无符号`的值。
+        if (-5 > sizeof(int))                   // sizeof 返回`无符号`的值。
             printf("negative greater than positive : (-5 > 4)!\n");
 
         unsigned char act0401 =  121; unsigned char act0402 = 200; signed char act04 = act0401 + act0402;

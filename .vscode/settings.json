@@ -1,5 +1,5 @@
 {
-    "editor.wordWrap": "off",
+    
     "terminal.integrated.env.osx": {
         "DOCKER_HOST": "unix:///Users/stevenobelia/.orbstack/run/docker.sock"
     },
@@ -7,8 +7,6 @@
     // "extensions.ignoreRecommendations": true,
     "debug.toolBarLocation": "floating",
     "debug.showVariableTypes": true,
-
-    "files.autoSave": "onFocusChange",
     
     "github.copilot.enable": {
         "*": false,
