@@ -4,7 +4,7 @@
 /**
  * @see https://wangdoc.com/clang/syntax
  */
-int main(){
+int main(void){
     
     /*
         语句（statement）

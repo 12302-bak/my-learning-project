@@ -20,6 +20,12 @@
                     "text": "-enable-pretty-printing",
                     "ignoreFailures": true
                 },
+                // https://github.com/microsoft/vscode-cpptools/issues/1210
+                {
+                    "description": "Set command line arguments",
+                    "text": "-gdb-set args ${input:fileContentKey}",
+                    "ignoreFailures": true
+                },
                 {
                     "description": "Set Disassembly Flavor to Intel",
                     "text": "-gdb-set disassembly-flavor intel",
@@ -34,6 +40,19 @@
             },
             "preLaunchTask": "cmake: build"
         },
+    ],
+    "inputs": [
+        {
+            "id": "fileContentKey",
+            "type": "command",
+            "command": "extension.commandvariable.file.content",
+            "args": {
+                "fileName": "${file}",
+                "key": "* @args",
+                "debug": false,
+                "default": "--help"
+            }
+        }
     ],
     "version": "2.0.0"
 }

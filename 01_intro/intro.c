@@ -2,6 +2,6 @@
 /**
  * @see https://wangdoc.com/clang/intro
  */
-int main(){
+int main(void){
     return 0;
 }

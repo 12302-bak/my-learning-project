@@ -30,3 +30,7 @@ This repository utilizes custom VS Code automation tasks to achieve a seamless *
     *   **Configure**: Runs your tailored CMake configuration command if necessary.
     *   **Compile**: Automatically builds the corresponding binary target for the active file.
     *   **Debug**: Instantly launches the `cppdbg` core engine, allowing you to trace code and hit breakpoints immediately.
+
+## Reference
+* https://wangdoc.com/clang/
+* https://cppreference.com/c

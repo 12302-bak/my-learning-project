@@ -43,6 +43,7 @@
 				"ms-vscode.cpptools", 
 				"ms-vscode.cpptools-extension-pack",
 				// "llvm-vs-code-extensions.vscode-clangd",
+				"rioj7.command-variable",	// support @args for each main().
 				"ledyba.launch-buttons"
 			]
 		}
