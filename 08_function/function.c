@@ -52,8 +52,12 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
 
      */
         printf("========================   Intro   ========================\n");
-        undefined_f(1);                                     // called for `undefined_f()` via undefined_f(1)!
-        printf("Fibonacci for 10: %lu\n\n", Fibonacci(10));   // Fibonacci for 10: 55
+        #pragma clang diagnostic push
+        #pragma clang diagnostic ignored "-Wdeprecated-non-prototype"
+        #pragma clang diagnostic ignored "-Weverything"
+        undefined_f(1);                                         // called for `undefined_f()` via undefined_f(1)!
+        #pragma clang diagnostic pop
+        printf("Fibonacci for 10: %lu\n\n", Fibonacci(10));     // Fibonacci for 10: 55
         
     /**
         2. main()
