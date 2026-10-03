@@ -1,1 +1,1 @@
-include(${CMAKE_SOURCE_DIR}/.cmake/mult_exec_template.cmake)
+include(${CMAKE_SOURCE_DIR}/.cmake/sing_proj_template.cmake)
