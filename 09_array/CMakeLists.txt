@@ -1,0 +1,1 @@
+include(${CMAKE_SOURCE_DIR}/.cmake/mult_exec_template.cmake)

@@ -108,7 +108,12 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
             申明如是：  `返回类型 (* 指针变量)(参数类型列表) = `；
             重新赋值：  `指针变量 = &var`
 
-            C 语言的函数调用运算符 () 实际上作用于“函数的指针，当写 printf_ptr(...) 时，编译器直接使用这个地址进行跳转。
+            C 标准规定：一个函数指示符（function designator），除了作为 sizeof 或一元 & 的操作数之外，都会被转换为"指向该函数的指针"。
+            这个可以通过编译器魔法实现。
+            C 语言的函数调用运算符 () 实际上作用于“函数的指针，当除了上述的`sizeof`和`&`操作之外，指示符都会退化成为函数指针。
+            也就是说：
+                printf 这个名字本身是"函数指示符"（function designator），类型是 int (const char*, ...)（函数类型）
+                在大多数表达式里，它会自动变成 int (*)(const char*, ...)（函数指针类型）
 
             如果一个函数的参数或返回值，也是一个函数，那么函数原型可以写成下面这样。
             int compute(int (*myfunc)(int), int, int);
@@ -213,7 +218,7 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
 
 
      */
-        printf("\n======================== Indicator ========================\n");
+        printf("\n======================== Designator ========================\n");
         printf("called from extern function `sum`: %d\n", sum(1, 2));
 
         counter();  // 1
