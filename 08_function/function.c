@@ -105,26 +105,43 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
         4. 函数指针
 
             函数本身就是一段内存里面的代码，C 语言允许通过指针获取函数。有了函数指针，通过它也可以调用函数。
-            申明如是：  `返回类型 (* 指针变量)(参数类型列表) = `；
+            申明如是：  `返回类型 (* 指针变量)(参数类型列表) = `；直接通过地址赋值的时候可以不用太对齐函数原型，比如如下 common_ptr。
             重新赋值：  `指针变量 = &var`
 
             C 标准规定：一个函数指示符（function designator），除了作为 sizeof 或一元 & 的操作数之外，都会被转换为"指向该函数的指针"。
             这个可以通过编译器魔法实现。
-            C 语言的函数调用运算符 () 实际上作用于“函数的指针，当除了上述的`sizeof`和`&`操作之外，指示符都会退化成为函数指针。
+            C 语言的函数调用运算符 () 实际上作用于“函数的指针，当除了上述的`sizeof`和`&`操作之外，指示符都会退化(decay)成为函数指针。
             也就是说：
                 printf 这个名字本身是"函数指示符"（function designator），类型是 int (const char*, ...)（函数类型）
                 在大多数表达式里，它会自动变成 int (*)(const char*, ...)（函数指针类型）
 
             如果一个函数的参数或返回值，也是一个函数，那么函数原型可以写成下面这样。
             int compute(int (*myfunc)(int), int, int);
+
+            嵌入式开发中有提到过相关用法：
+                https://youtu.be/Mh4ZBmXwu-A?si=7zLkP-pQyqjeyzZl&t=868
+                https://study.163.com/course/courseLearn.htm?courseId=320025#/learn/video?lessonId=436270&courseId=320025 14:10
+
+                void (*show)(char *, ...);
+                int main(int argc, char **argv){
+                    show = 0x33f94aa8;
+                    show("hello u-boot.\n");
+                    return 0;
+                }
+
+                arm-linux-gcc 编译完，然后通过 objcopy 去头，go 30000000 跳转到程序，运行，打印。
      */
         printf("========================pointer of function========================\n");
         void (*increment_ptr)(int) = &increment;
 
+        // 通用指针
+        void (*common_ptr)(char *, int) = (void *)0x7ffff7e03100;
+        common_ptr("\nwhen assigning values to the address, there is no need to align the function prototype.\n\n", 12302);
+
         int (*printf_ptr)(const char *, ...) = (void *)0x7ffff7e03100;          // 固定地址和操作系统 ASLR 有关，所以下面的方式比较稳妥。容器也可参考`"securityOpt": [ "seccomp=unconfined" ]`
         printf_ptr = &printf;                                                   // 重新赋值
-        printf("printf's     address is: %p\n", &printf);                       // 0x7ffff7e03100
-        printf("printf_ptr's address is: %p\n", &printf_ptr);                   // 0x7fffffffdce0
+        printf("printf's     address is: %p\n"  , &printf);                       // 0x7ffff7e03100
+        printf("printf_ptr's address is: %p\n\n", &printf_ptr);                   // 0x7fffffffdce0
         
         // 有了指针，可以通过指针直接调用函数，() 是作用于函数指针的。
         printf_ptr("called method 01\n");

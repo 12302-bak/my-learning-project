@@ -1,9 +1,14 @@
 
 #include <stdio.h>
+#include <string.h>
+
+#define ARRAY_LEN(a) (sizeof(a) / sizeof((a)[0]))
+
+int sum_array(int a[][4], int n);
 
 /**
  * @see https://wangdoc.com/clang/array
- *
+ * 
  */
 int main(void){
 
@@ -128,7 +133,7 @@ int main(void){
             
      */
         printf("\n========================   Variable-length Array   ========================\n");
-        int i = 10,k;
+        int i = 10,k = 3;
         // 下面三个数组的长度都需要运行代码才能知道，编译器并不知道它们的长度，所以它们都是变长数组。
         int a1[i];
         int a2[i + 5];
@@ -141,32 +146,167 @@ int main(void){
     /**
         5. 数组的地址
 
-            
+
+            在大多数表达式里，数组名会自动转换成"指向数组首元素的指针"。也就是 a == &a[0]
+                int arr[10];
+                arr                     // 类型从 int[10] 变成 int*
+
+                所以如果在退化后，就获取不到长度信息了。
+                比如通过函数传参，使用 sizeof()，就只能被当指针对待，获取的也就是指针的 size 了，所以函数参数里面还得传入元素个数。
+                而在没有退化之前，使用 sizeof(), 是可以获取到整个数组占用的长度的。
+
+            &arr 需要注意：
+                int arr[10];
+                int *p1 = arr;          // arr 退化为 int*，指向首元素
+                int (*p2)[10] = &arr;   // &arr 不退化，类型是 int(*)[10]，指向整个数组
+
+                arr[3]                  // 合法；arr 退化为 int*，
+                p1 [3]                  // 合法；p1 本来就是 int*
+                3 [p1]                  // 合法；==> *(3 + p1)，参考：https://en.cppreference.com/c/language/operator_member_access
+
+
+            By definition, the subscript operator E1[E2] is exactly identical to *((E1)+(E2))
+            C 语言里数组下标运算符 [] 根本不是为数组设计的，它是为指针设计的。数组能用 []，是因为数组退化成了指针。指针才是 [] 的正主。
+
+           
+            int brr[4][2] = {0};
+            *(brr[0]) = brr[0][0]
+            **brr     = brr[0][0]       ❓
+
      */
         printf("\n========================   The address of the Array   ========================\n");
+        // 对于一维数组来说，它的标识符表示，第一个元素 arr[0]，取址类型是 int (*p12)
+        int arr[10];
+        int *p1       = arr;
+        int (*p2)[10] = &arr;
+
+        int p11       = arr[1];     // arr[1] 的类型是 int.
+        int (*p12)    = &arr[1];
+
+        printf("arr size:%zu\t, &arr size:%zu\n", sizeof(*p1), sizeof(*p2));
+        printf("arr size:%zu\t, &arr size:%zu\n", sizeof(arr[0]), sizeof(*&arr));
+
+        // 对于二维数组来说，它的标识符表示，第一个元素 brr[0]，取址类型是 int (*ptr)[2]
+        int brr[4][2] = {};
+        int (*ptr)[2] = brr;
+        int (*ptz)[4][2] = &brr;
+
+        int* crr      = brr[1];     // brr[1] 的类型是 int[2]（第二行这个数组），但在表达式里它退化为 int*，指向 brr[1][0]。
+        int (*ptc)[2] = &brr[1];
+
+        printf("brr[4][2] first's type is int (*ptr)[2], and size is:%zu\n", sizeof(*ptr));
+
+        printf("other a expression is: integer-expression [ pointer-expression ], %d\n", 2[c]);     // 6
 
     /**
         6. 数组指针的加减法
 
+            C 语言里面，数组名可以进行加法和减法运算，等同于在数组成员之间前后移动，即从一个成员的内存地址移动到另一个成员的内存地址。
+            比如，a + 1 返回下一个成员的地址，a - 1 返回上一个成员的地址。
+            a + i 的每轮循环每次都会指向下一个成员的地址，*(a + i) 取出该地址的值，等同于 a[i]。对于数组的第一个成员，*(a + 0)（即 *a ）等同于 a[0]。
+
+            如果指针变量 p 指向数组的一个成员，那么 p++ 就相当于指向下一个成员，这种方法常用来遍历数组。比如 p_a。
+
+            反过来，通过数组的减法，可以知道两个地址之间有多少个数组成员
             
      */
         printf("\n========================   Array pointer addition and subtraction operations   ========================\n");
+        int apaaso[]  = {1, 2, 3, 4, 5, 6, 7, 8, 9};
+        int* p_a = apaaso;         // 注意，数组名指向的地址是不能变的
+        for ( ; *p_a != 9; p_a++){ printf("%d ", *p_a); } printf("\n");
+
+        // 遍历数组一般都是通过数组长度的比较来实现，但也可以通过数组起始地址和结束地址的比较来实现。
+        p_a = apaaso;
+        for ( ; p_a <= apaaso + 8; p_a++){ printf("%d ", *p_a); } printf("\n");
+
+        p_a = apaaso;
+        for ( ; *p_a != 9; p_a++){ } printf("array's length == %td\n", ++p_a - apaaso);
 
     /**
         7. 数组的复制
 
-            
+            由于数组名是指针，所以复制数组不能简单地复制数组名。
+            正确的是单个循环，或者使用 memcpy。
      */
         printf("\n========================   Array copy   ========================\n");
+        int* a7 = NULL;
+        int b7[3] = {1, 2, 3};
 
+        a7 = b7;            // 结果不是将数组 b7 复制给数组 a7，而是让 a7 和 b7 指向同一个数组。
+        printf("%d\n", *a7);
+
+        for (size_t i = 0; i < ARRAY_LEN(b7); i++){
+            a7[i] = b7[i];  // 由于 a7 和 b7 地址一样，所以相当于把 b7 里面的数值取出来又放进去。新建一个数组，赋值给 a7 即可。
+        } printf("\n");
+
+        int c7[ARRAY_LEN(b7)] = {};
+        memcpy(c7, b7, sizeof(b7));
+        for (size_t i = 0; i < ARRAY_LEN(c7); i++) { printf("%d ", c7[i]); } printf("\n");
+        
     /**
         8. 作为函数的参数
 
+            1. 声明参数数组
+
+                数组作为函数的参数，一般会同时传入数组名和数组长度。
+
+                如果函数的参数是多维数组，那么除了第一维的长度可以当作参数传入函数，其他维的长度需要写入函数的定义。
+                int sum_array(int a[][4], int n) { }
+                int a[2][4] = { };
+                int sum = sum_array(a, 2);
+                如果不写，则编译器不知道一维有多少个元素，编译不通过。a 是 int(*)[?]，a + 1 要跳过一整行。一整行多大？
+
+            2. 变长数组作为参数
+
+                变长数组作为函数参数时，写法略有不同。
+                int sum_array(int n, int a[n]) { }
+                int a[] = {3, 5, 7, 3};
+                int sum = sum_array(4, a);
+                数组 a[n] 是一个变长数组，它的长度取决于变量 n 的值，只有运行时才能知道。
+                所以，变量 n 作为参数时，顺序一定要在变长数组前面，这样运行时才能确定数组 a[n] 的长度，否则就会报错。
+
+                因为函数原型可以省略参数名，所以变长数组的原型中，可以使用 * 代替变量名，也可以省略变量名。
+                int sum_array(int, int [*]);
+                int sum_array(int, int []);
+
+                变长数组作为函数参数有一个好处，就是多维数组的参数声明，可以把后面的维度省掉了。c99
+                // 原来的写法
+                int sum_array(int a[][4], int n);
+                // 变长数组的写法
+                int sum_array(int n, int m, int a[n][m]);
+
+            3. 数组字面量作为参数
+
+                C 语言允许将数组字面量作为参数，传入函数。
+                // 数组变量作为参数
+                int a[] = {2, 3, 4, 5};
+                int sum = sum_array(a, 4);
+
+                // 数组字面量作为参数
+                int sum = sum_array((int []){2, 3, 4, 5}, 4);
             
      */
         printf("\n========================   As a parameter of a function   ========================\n");
+        int a8[2][4] = {
+            {1, 2, 3, 4},
+            {8, 9, 10, 11}
+        };
+        printf("sum_array normal  output is: %d\n", sum_array(a8, 2));                          // 48
 
+        printf("sum_array literal output is: %d\n", sum_array((int [][4]){2, 3, 4, 5}, 1));     // 14
 
     printf("\n\033[1;31;42mCongratulations! you have learned the array of C language!\033[0m\n");
     return 0;
+}
+
+// int sum_array(int (*a)[4], int n);
+// int sum_array(int a[2][4], int n);
+int sum_array(int a[][4], int n) {
+    int sum = 0;
+    for (size_t i = 0; i < n; i++) {
+        for (size_t j = 0; j < 4; j++){
+            sum += a[i][j];
+        }
+    }
+    return sum;
 }
