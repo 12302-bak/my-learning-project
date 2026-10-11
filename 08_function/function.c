@@ -140,8 +140,8 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
 
         int (*printf_ptr)(const char *, ...) = (void *)0x7ffff7e03100;          // 固定地址和操作系统 ASLR 有关，所以下面的方式比较稳妥。容器也可参考`"securityOpt": [ "seccomp=unconfined" ]`
         printf_ptr = &printf;                                                   // 重新赋值
-        printf("printf's     address is: %p\n"  , &printf);                       // 0x7ffff7e03100
-        printf("printf_ptr's address is: %p\n\n", &printf_ptr);                   // 0x7fffffffdce0
+        printf("printf's     address is: %p\n"  , &printf);                     // 0x7ffff7e03100
+        printf("printf_ptr's address is: %p\n\n", &printf_ptr);                 // 0x7fffffffdce0
         
         // 有了指针，可以通过指针直接调用函数，() 是作用于函数指针的。
         printf_ptr("called method 01\n");
@@ -225,8 +225,8 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
                 const 在 C 里不是“常量”，更准确地说是只读限定符：它限制某个对象不能通过当前标识符被修改。
 
                 对于变量：
-                    全局 const，通常会触发段错误
-                    局部 const，可能绕过编译器检查，但属于未定义行为（UB）
+                    全局 const，通常会触发段错误，比如：global_var
+                    局部 const，可能绕过编译器检查，但属于未定义行为（UB），比如：local_var
 
                 对于指针：int* p
                     const int* p;       限制修改 `*p`，也就是指针所指地址里面的值。但是不影响修改 p = &other.
@@ -280,10 +280,11 @@ int main(int argc, char *argv[], char *envp[]){ // envp —— 是 Unix / GCC �
     return 0;
 }
 
+// 根据 ABI 架构的不同，可能在栈上，也有可能在寄存器里，部分栈上。完全由编译器生成的汇编代码去布局。
 double average(int i, ...) {
     int total = 0;
-    va_list ap;
-    va_start(ap, i);
+    va_list ap;                             // 根据ABI不同，可以是一个结构体，或者一个简单指针 char * 或者 void *，`Debug Console`中 执行`-exec p /x ap`，可以查看详情。
+    va_start(ap, i);                        //           ，下述的几个方法可以理解为是一段内联汇编，用来处理参数。
     for (int j = 1; j <= i; ++j) {
         int temp = va_arg(ap, int);
         total += temp;

@@ -43,7 +43,8 @@
 				"ms-vscode.cpptools", 
 				"ms-vscode.cpptools-extension-pack",
 				// "llvm-vs-code-extensions.vscode-clangd",
-				"rioj7.command-variable",	// support @args for each main().
+				"rioj7.command-variable",	// support @args for each main() via `-gdb-set args`.
+				"koenigstag.git-changelists",
 				"ledyba.launch-buttons"
 			]
 		}
