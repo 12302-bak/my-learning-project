@@ -128,7 +128,7 @@ int main(void){
         // pointer - pointer
         short* j1 = (short*)0x1234, * j2 = (short*)0x123A;
         ptrdiff_t dist = j2 - j1;
-        printf("\nfrom pointer1 to pointer2's distance is: %td\n", dist);   // 3
+        printf("\nfrom pointer1 to pointer2's distance is: %d\n", dist);   // 3
 
         // compare
         if( j2 > j1 ) 

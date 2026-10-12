@@ -90,7 +90,7 @@ int main(void){
         size_t size = sizeof(int);
         printf("\n");
         printf("sizeof(short)     = %zu bytes\n", sizeof(short));       // 2
-        printf("sizeof(int)       = %zu bytes\n", size);                // 4
+        printf("sizeof(int)       = %u bytes\n",  size);                // 4
         printf("sizeof(long)      = %zu bytes\n", sizeof(long));        // 8
         printf("sizeof(long long) = %zu bytes\n", sizeof(long long));   // 8
         printf("sizeof(void*)     = %zu bytes\n", sizeof(void*));       // 8    void* 是"指向任意类型的指针"
@@ -296,7 +296,7 @@ int main(void){
         // 参数为数值
         size_t s3 = sizeof(3.14);
         size_t s4 = sizeof(size_t);
-        printf("int: %zu, value: %zu, literal: %zu, size_t: %zu\n", s1, s2, s3, s4);        // int: 4, value: 4, literal: 8, size_t: 8
+        printf("int: %u, value: %u, literal: %u, size_t: %u\n", s1, s2, s3, s4);        // int: 4, value: 4, literal: 8, size_t: 8
 
     /**
         9. 类型的(隐式/自动)转换:
