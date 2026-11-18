@@ -27,7 +27,7 @@ EOF
 
 sudo mv /tmp/sources.list /etc/apt/sources.list
 sudo apt update
-sudo apt install -y gdb cmake file xxd gdbserver ninja-build
+sudo apt install -y gdb cmake file xxd gdbserver ninja-build libgtest-dev libgmock-dev
 
 # 安装时区数据 
 sudo apt install -y tzdata && echo "Asia/Shanghai" | sudo tee /etc/timezone

@@ -1,10 +1,14 @@
 cmake_minimum_required(VERSION 3.20)
-project(my_learning_project C)
+project(my_learning_project C CXX)
 
 set(CMAKE_C_STANDARD 99)
+set(CMAKE_CXX_STANDARD 14)
 set(CMAKE_BUILD_TYPE Debug)
 # add_compile_options(-g)
 # add_compile_options("-isystem" "/usr/lib/gcc/x86_64-linux-gnu/11/include")
+
+find_package(GTest REQUIRED)
+
 
 # file(GLOB SRC_LIST "${CMAKE_CURRENT_SOURCE_DIR}/src/*.c")
 file(GLOB SUB_DIRS RELATIVE ${CMAKE_CURRENT_SOURCE_DIR} "[0-9]*")
@@ -17,3 +21,6 @@ foreach(DIR ${SUB_DIRS})
         add_subdirectory(${DIR})
     endif()
 endforeach()
+
+# 3. 指定测试目录
+add_subdirectory(tests)
