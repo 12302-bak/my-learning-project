@@ -141,8 +141,8 @@ int main(void){
 
         // 数组可以修改内容，不可重新赋值。
         char s23[] = "hello";
+        s23[0] = 'z';                                   // ✅
         // s23 = "world";                               // ❌ error: assignment to expression with array type
-        s23[1] = '_';                                   // ✅
 
         // 但是数组声明的字符串，通过指针是可以修改内容的。其实换种思路想，数组下标的方式也是指针访问另一种方式，E1[E2] <==> *((E1)+(E2))
         char* s231 = s23;
